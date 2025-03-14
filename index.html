@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-teal-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">RestaurantPro</h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="hover:text-teal-200">Dashboard</a>
+                <a href="#" class="hover:text-teal-200">Orders</a>
+                <a href="#" class="hover:text-teal-200">Menu</a>
+                <a href="#" class="hover:text-teal-200">Staff</a>
+                <a href="#" class="hover:text-teal-200">Reports</a>
+            </div>
+            <button class="md:hidden"><i class="bi bi-list text-2xl"></i></button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="dashboard-card bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-gray-500">Today's Sales</h3>
+                        <p class="text-2xl font-bold">$2,458</p>
+                    </div>
+                    <i class="bi bi-currency-dollar text-3xl text-teal-600"></i>
+                </div>
+            </div>
+            <div class="dashboard-card bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-gray-500">Active Orders</h3>
+                        <p class="text-2xl font-bold">18</p>
+                    </div>
+                    <i class="bi bi-cart text-3xl text-teal-600"></i>
+                </div>
+            </div>
+            <div class="dashboard-card bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-gray-500">Customers</h3>
+                        <p class="text-2xl font-bold">156</p>
+                    </div>
+                    <i class="bi bi-people text-3xl text-teal-600"></i>
+                </div>
+            </div>
+            <div class="dashboard-card bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-gray-500">Staff Present</h3>
+                        <p class="text-2xl font-bold">12</p>
+                    </div>
+                    <i class="bi bi-person-badge text-3xl text-teal-600"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Recent Orders</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="px-4 py-2 text-left">Order ID</th>
+                            <th class="px-4 py-2 text-left">Customer</th>
+                            <th class="px-4 py-2 text-left">Items</th>
+                            <th class="px-4 py-2 text-left">Total</th>
+                            <th class="px-4 py-2 text-left">Status</th>
+                            <th class="px-4 py-2 text-left">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderTableBody">
+                        <!-- Orders will be dynamically populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Quick Actions</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="bg-teal-600 text-white p-4 rounded-lg hover:bg-teal-700 transition">
+                        <i class="bi bi-plus-circle mb-2 text-2xl"></i>
+                        <p>New Order</p>
+                    </button>
+                    <button class="bg-teal-600 text-white p-4 rounded-lg hover:bg-teal-700 transition">
+                        <i class="bi bi-book mb-2 text-2xl"></i>
+                        <p>Menu Items</p>
+                    </button>
+                    <button class="bg-teal-600 text-white p-4 rounded-lg hover:bg-teal-700 transition">
+                        <i class="bi bi-calendar-check mb-2 text-2xl"></i>
+                        <p>Reservations</p>
+                    </button>
+                    <button class="bg-teal-600 text-white p-4 rounded-lg hover:bg-teal-700 transition">
+                        <i class="bi bi-graph-up mb-2 text-2xl"></i>
+                        <p>Reports</p>
+                    </button>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Popular Items</h2>
+                <div class="space-y-4" id="popularItems">
+                    <!-- Popular items will be dynamically populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for orders
+        const orders = [
+            { id: '1234', customer: 'John Doe', items: '2x Burger, 1x Fries', total: '$35.99', status: 'Preparing' },
+            { id: '1235', customer: 'Jane Smith', items: '1x Pizza, 2x Coke', total: '$28.50', status: 'Ready' },
+            { id: '1236', customer: 'Mike Johnson', items: '3x Tacos, 1x Salad', total: '$42.75', status: 'Delivered' }
+        ];
+
+        // Sample data for popular items
+        const popularItems = [
+            { name: 'Classic Burger', orders: 45, revenue: '$675' },
+            { name: 'Margherita Pizza', orders: 38, revenue: '$722' },
+            { name: 'Caesar Salad', orders: 32, revenue: '$384' }
+        ];
+
+        // Populate orders table
+        const orderTableBody = document.getElementById('orderTableBody');
+        orders.forEach(order => {
+            const row = document.createElement('tr');
+            row.className = 'border-b';
+            row.innerHTML = `
+                <td class="px-4 py-2">#${order.id}</td>
+                <td class="px-4 py-2">${order.customer}</td>
+                <td class="px-4 py-2">${order.items}</td>
+                <td class="px-4 py-2">${order.total}</td>
+                <td class="px-4 py-2">
+                    <span class="px-2 py-1 rounded-full text-sm ${
+                        order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+                        order.status === 'Preparing' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-blue-100 text-blue-800'
+                    }">${order.status}</span>
+                </td>
+                <td class="px-4 py-2">
+                    <button class="text-teal-600 hover:text-teal-800"><i class="bi bi-three-dots"></i></button>
+                </td>
+            `;
+            orderTableBody.appendChild(row);
+        });
+
+        // Populate popular items
+        const popularItemsContainer = document.getElementById('popularItems');
+        popularItems.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'flex justify-between items-center p-3 bg-gray-50 rounded';
+            div.innerHTML = `
+                <div>
+                    <h3 class="font-medium">${item.name}</h3>
+                    <p class="text-sm text-gray-500">${item.orders} orders</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-medium">${item.revenue}</p>
+                    <p class="text-sm text-gray-500">Revenue</p>
+                </div>
+            `;
+            popularItemsContainer.appendChild(div);
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
